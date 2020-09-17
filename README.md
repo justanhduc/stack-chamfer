@@ -39,17 +39,20 @@ python -m pytest -sv test.py
 ## Examples
 
 ```
-xyz11 = T.rand(2, 4).cuda()  # a point cloud in 4D!!!
-xyz11.requires_grad_(True)
-xyz12 = T.rand(4, 4).cuda()
-xyz12.requires_grad_(True)
-xyz21 = T.rand(5, 4).cuda()
-xyz22 = T.rand(3, 4).cuda()
+import torch
+from stack_chamfer import chamfer_loss
 
-xyz1 = T.cat([xyz11, xyz12])  # unbatchable point cloud
-xyz2 = T.cat([xyz21, xyz22])
-batch1 = T.tensor([0, 0, 1, 1, 1, 1]).cuda()
-batch2 = T.tensor([0, 0, 0, 0, 0, 1, 1, 1]).cuda()
+xyz11 = torch.rand(2, 4).cuda()  # a point cloud in 4D!!!
+xyz11.requires_grad_(True)
+xyz12 = torch.rand(4, 4).cuda()
+xyz12.requires_grad_(True)
+xyz21 = torch.rand(5, 4).cuda()
+xyz22 = torch.rand(3, 4).cuda()
+
+xyz1 = torch.cat([xyz11, xyz12])  # unbatchable point cloud
+xyz2 = torch.cat([xyz21, xyz22])
+batch1 = torch.tensor([0, 0, 1, 1, 1, 1]).cuda()  # create a batch indicator for the stacked point cloud
+batch2 = torch.tensor([0, 0, 0, 0, 0, 1, 1, 1]).cuda()
 
 loss = chamfer_loss(xyz1, xyz2, batch1, batch2)
 ```
